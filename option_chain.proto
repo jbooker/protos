@@ -1,0 +1,84 @@
+syntax = "proto3";
+option go_package = "/option_chain";
+
+message OptionChain {
+    string symbol = 1;
+    Underlying underlying = 2;
+    repeated Contract calls = 3;
+    repeated Contract puts = 4;
+    double interval = 5;
+    bool isDelayed = 6;
+    bool isIndex = 7;
+    double numberOfContracts = 8;
+    double volatility = 9;
+    repeated string expirations = 10;
+    repeated double strikes = 11;
+    string status = 12;
+}
+
+message Underlying {
+    double ask = 1;
+    double askSize = 2;
+    double bid = 3;
+    double bidSize = 4;
+    double change = 5;
+    double close = 6;
+    bool delayed = 7;
+    string description = 8;
+    string exchangeName = 9;
+    double fiftyTwoWeekHigh = 10;
+    double fiftyTwoWeekLow = 11;
+    double highPrice = 12;
+    double last = 13;
+    double lowPrice = 14;
+    double mark = 15;
+    double markChange = 16;
+    double markPercentChange = 17;
+    double openPrice = 18;
+    double percentChange = 19;
+    double quoteTime = 20;
+    double totalVolume = 21;
+    double tradeTime = 22;
+}
+
+message Contract {
+    ContractType putCall = 1;
+    double strike = 2;
+    string currency = 3;
+    double lastPrice = 4;
+    double change = 5;
+    double percentChange = 6;
+    double openInterest = 7;
+    double bid = 8;
+    double ask = 9;
+    string contractSize = 10;
+    double expiration = 11;
+    double lastTradeDate = 12;
+    double impliedVolatility = 13;
+    bool inTheMoney = 14;
+    double volume = 15;
+    double delta = 16;
+    double gamma = 17;
+    double theta = 18;
+    double vega = 19;
+    double rho = 20;
+    double timeValue = 21;
+    double dte = 22;
+}
+
+enum ContractType {
+    CALL = 0;
+    PUT = 1;
+}
+
+message OptionChainRequest {
+    string symbol = 1;
+}
+
+message OptionChainResponse {
+    OptionChain optionChain = 1;
+}
+
+service OptionChainService {
+    rpc GetOptionChain (OptionChainRequest) returns (OptionChainResponse) {}
+}
