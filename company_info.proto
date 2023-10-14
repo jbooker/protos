@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option go_package = "/company_info";
+
+message CompanyInfo {
+    string name = 1;
+    string address = 2;
+    string city = 3;
+    string state = 4;
+    string country = 5;
+    string zip = 6;
+    string website = 7;
+    string logo = 8;
+    string description = 9;
+    string symbol = 10;
+    string exchange = 11;
+    string industry = 12;
+    string ceo = 13;
+    string sector = 14;
+    int32 employees = 15;
+    KeyStats keyStats = 16;
+}
+
+message KeyStats {
+    float marketCap = 1;
+    float sharesOutstanding = 2;
+    float beta = 3;
+    float week52Change = 4;
+    float sharesShort = 5;
+    float sharesShortPriorMonth = 6;
+    float dividendAmount = 7;
+    repeated string earningsDates = 8; // could be a range or specific if date announced
+    float eps = 9;
+    float peRatio = 10;
+    float forwardPE = 11;
+    float revenue = 12;
+    float pegRatio = 13;
+    float roe = 14;
+    float ebitda = 15;
+    float netIncome = 16;
+    float profitMargin = 18;
+    float debtToEquity = 19;
+    float freeCashFlow = 20;
+    float grossMargin = 21;
+}
+
+message CompanyInfoRequest {
+    string symbol = 1;
+}
+
+message CompanyInfoResponse {
+    CompanyInfo companyInfo = 1;
+}
+
+service CompanyInfoService {
+    rpc GetCompanyInfo (CompanyInfoRequest) returns (CompanyInfoResponse) {}
+}
