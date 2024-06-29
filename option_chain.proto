@@ -39,6 +39,7 @@ message Underlying {
     double quoteTime = 20;
     double totalVolume = 21;
     double tradeTime = 22;
+    double volatility = 23;
 }
 
 message Contract {

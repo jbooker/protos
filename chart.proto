@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message History {
+  string symbol = 1;
+  repeated Candle candles = 2;
+}
+
+message Candle {
+  int64 date_time = 1;
+  double open = 2;
+  double close = 3;
+  double high = 4;
+  double low = 5;
+  double volume = 6;
+}
+
+enum Yearly {
+  BY_DAY = 0;
+  BY_WEEK = 1;
+  BY_MONTH = 2;
+}
