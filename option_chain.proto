@@ -53,7 +53,7 @@ message Contract {
     double bid = 8;
     double ask = 9;
     string contractSize = 10;
-    double expiration = 11;
+    uint64 expiration = 11;
     double lastTradeDate = 12;
     double impliedVolatility = 13;
     bool inTheMoney = 14;
