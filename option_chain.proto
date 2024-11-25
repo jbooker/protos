@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 option go_package = "/option_chain";
 
 message OptionChain {
@@ -53,7 +54,7 @@ message Contract {
     double bid = 8;
     double ask = 9;
     string contractSize = 10;
-    uint64 expiration = 11;
+    google.protobuf.Timestamp expiration = 11;
     double lastTradeDate = 12;
     double impliedVolatility = 13;
     bool inTheMoney = 14;
