@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message Quote {
+  string symbol = 1;
+  QuoteData quote = 2;
+  repeated QuoteData quotes = 3;
+}
+
+message QuoteData {
+  string symbol = 1;
+  double price = 2;
+  double price_change = 3;
+  double price_change_percent = 4;
+  double bid = 5;
+  double ask = 6;
+  double volume = 7;
+  double day_high = 8;
+  double day_low = 9;
+  double year_high = 10;
+  double year_low = 11;
+}
