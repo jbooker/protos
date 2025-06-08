@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+// Individual option recommendation
+message OptionRecommendation {
+  string option_symbol = 1;
+  string option_type = 2;
+  optional double strike_price = 3;
+  optional google.protobuf.Timestamp expiration_date = 4;
+  optional double premium = 5;
+  optional double delta = 6;
+  optional double open_interest = 7;
+  string status = 8;
+  optional double score = 9;
+}
+
+// Scored option data
+message ScoredOption {
+  string option_symbol = 1;
+  optional double strike_price = 2;
+  optional google.protobuf.Timestamp expiration_date = 3;
+  optional double premium = 4;
+  optional double delta = 5;
+  optional double open_interest = 6;
+  double score = 7;
+}
+
+// Complete strategy recommendation for a symbol
+message StrategyRecommendation {
+  string symbol = 1;
+  optional double rsi = 2;
+  string note = 3;
+  OptionRecommendation call_recommendation = 4;
+  OptionRecommendation put_recommendation = 5;
+  repeated ScoredOption all_scored_calls = 6;
+  repeated ScoredOption all_scored_puts = 7;
+}
+
+message StrategyRecommendations {
+    repeated StrategyRecommendation recommendations = 1;
+    string note = 2;
+}
