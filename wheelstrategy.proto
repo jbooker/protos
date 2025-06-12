@@ -13,6 +13,7 @@ message OptionRecommendation {
   optional double open_interest = 7;
   string status = 8;
   optional double score = 9;
+  optional double yield = 10;
 }
 
 // Scored option data
@@ -24,6 +25,7 @@ message ScoredOption {
   optional double delta = 5;
   optional double open_interest = 6;
   double score = 7;
+  optional double yield = 8;
 }
 
 // Complete strategy recommendation for a symbol
