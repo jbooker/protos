@@ -37,6 +37,7 @@ message StrategyRecommendation {
   OptionRecommendation put_recommendation = 5;
   repeated ScoredOption all_scored_calls = 6;
   repeated ScoredOption all_scored_puts = 7;
+  optional double stock_price = 8;
 }
 
 message StrategyRecommendations {
