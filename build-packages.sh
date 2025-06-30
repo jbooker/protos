@@ -4,6 +4,11 @@ set -e
 
 echo "Building all packages..."
 
+# Create dist directories
+mkdir -p dist/nuget
+mkdir -p dist/npm  
+mkdir -p dist/python
+
 # Generate protobuf files first
 ./GenProtos.sh
 
@@ -16,10 +21,14 @@ cd ../..
 
 echo "Building TypeScript package..."
 cd packages/typescript
-# Copy generated TypeScript files
+# Copy generated TypeScript files including Google protobuf dependencies
 cp ../../generated/typescript/*.ts src/
+if [ -d "../../generated/typescript/google" ]; then
+    cp -r ../../generated/typescript/google src/
+fi
 npm install
 npm run build
+# Update the pack destination to use the correct package name
 npm pack --pack-destination ../../dist/npm
 cd ../..
 
@@ -29,7 +38,7 @@ cd packages/python
 mkdir -p src/proto_models
 cp ../../generated/python/*.py src/proto_models/
 cp ../../generated/python/*.pyi src/proto_models/
-python -m build --outdir ../../dist/python
+python3 -m build --outdir ../../dist/python
 cd ../..
 
 echo "All packages built successfully!"

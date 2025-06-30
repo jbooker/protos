@@ -7,7 +7,7 @@ This repository contains Protocol Buffer definitions for trading and financial d
 | Language | Package Name | Description |
 |----------|--------------|-------------|
 | C# | `ProtoModels` | NuGet package for .NET applications |
-| TypeScript | `@yourorg/proto-models-ts` | npm package for TypeScript/JavaScript applications |
+| TypeScript | `@bookerinvestmentgroup/proto-models-ts` | npm package for TypeScript/JavaScript applications |
 | Python | `proto-models-py` | PyPI package for Python applications |
 
 ## 🚀 Installation
@@ -19,7 +19,7 @@ dotnet add package ProtoModels
 
 ### TypeScript/JavaScript
 ```bash
-npm install @yourorg/proto-models-ts
+npm install @bookerinvestmentgroup/proto-models-ts
 ```
 
 ### Python
@@ -37,7 +37,57 @@ This repository includes the following protobuf definitions:
 - **`quote.proto`** - Real-time quote data models
 - **`wheelstrategy.proto`** - Wheel strategy trading models
 
-## 🛠️ Development
+## � Publishing Packages
+
+### First Time Setup
+
+1. **Prepare for publishing**:
+   ```bash
+   ./prepare-publish.sh
+   ```
+   This will update package names and author information.
+
+2. **Create accounts and get API keys**:
+   - [NuGet.org](https://www.nuget.org/) - Create API key
+   - [npmjs.com](https://www.npmjs.com/) - Create account and access token
+   - [PyPI.org](https://pypi.org/) - Create account and API token
+
+3. **Add GitHub Secrets** (for automated publishing):
+   - `NUGET_API_KEY` - Your NuGet API key
+   - `NPM_TOKEN` - Your npm access token
+   - `PYPI_API_TOKEN` - Your PyPI API token
+
+### Publishing Workflow
+
+#### Manual Publishing (First Time)
+```bash
+# Build packages
+./build-packages.sh
+
+# Test packages locally
+./test-packages.sh
+
+# Publish manually to each registry
+# See PUBLISHING.md for detailed commands
+```
+
+#### Automated Publishing (Recommended)
+```bash
+# Update version numbers in package configs
+# Commit your changes
+git add .
+git commit -m "Release v1.0.1"
+
+# Create and push a version tag
+git tag v1.0.1
+git push origin v1.0.1
+
+# GitHub Actions automatically publishes to all registries
+```
+
+📖 **See [PUBLISHING.md](PUBLISHING.md) for detailed publishing instructions**
+
+## �🛠️ Development
 
 ### Prerequisites
 
@@ -119,7 +169,7 @@ var quote = new Quote
 
 ### TypeScript
 ```typescript
-import { Quote, QuoteData } from '@yourorg/proto-models-ts';
+import { Quote, QuoteData } from '@bookerinvestmentgroup/proto-models-ts';
 
 const quote = new Quote({
     symbol: "AAPL",

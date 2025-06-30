@@ -5,13 +5,13 @@ Generated TypeScript protobuf models for trading and financial data.
 ## Installation
 
 ```bash
-npm install @yourorg/proto-models-ts
+npm install @bookerinvestmentgroup/proto-models-ts
 ```
 
 ## Usage
 
 ```typescript
-import { Quote, QuoteData, CompanyInfo } from '@yourorg/proto-models-ts';
+import { Quote, QuoteData, CompanyInfo } from '@bookerinvestmentgroup/proto-models-ts';
 
 // Create a quote object
 const quote = new Quote({

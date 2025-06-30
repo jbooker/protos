@@ -42,8 +42,28 @@ if ! command -v protoc-gen-ts &> /dev/null; then
     echo "WARNING: protoc-gen-ts is not installed. Skipping TypeScript generation."
     echo "Install with: npm install -g protoc-gen-ts"
 else
-    # don't gen grpc for TS
-    protoc --proto_path="${PROTO_PATH}" --ts_out="${TS_DEST_PATH}" --ts_opt=no_grpc *.proto
+    # Clean previous TypeScript generation
+    rm -rf "${TS_DEST_PATH}"/*
+    
+    # Include well-known types and don't gen grpc for TS
+    # Try different common paths for protobuf includes
+    PROTOBUF_INCLUDE=""
+    for path in "/opt/homebrew/include" "/usr/local/include" "/usr/include"; do
+        if [ -f "$path/google/protobuf/timestamp.proto" ]; then
+            PROTOBUF_INCLUDE="--proto_path=$path"
+            echo "Using protobuf includes from: $path"
+            break
+        fi
+    done
+    
+    if [ -n "$PROTOBUF_INCLUDE" ]; then
+        protoc --proto_path="${PROTO_PATH}" $PROTOBUF_INCLUDE \
+               --ts_out="${TS_DEST_PATH}" --ts_opt=no_grpc \
+               *.proto
+    else
+        echo "WARNING: Could not find Google protobuf includes. Some TypeScript files may have missing dependencies."
+        protoc --proto_path="${PROTO_PATH}" --ts_out="${TS_DEST_PATH}" --ts_opt=no_grpc *.proto
+    fi
     echo "Done generating TypeScript files..."
 fi
 

@@ -93,6 +93,9 @@ jobs:
       run: |
         mkdir -p packages/typescript/src
         cp generated/typescript/*.ts packages/typescript/src/
+        if [ -d "generated/typescript/google" ]; then
+          cp -r generated/typescript/google packages/typescript/src/
+        fi
     
     - name: Install dependencies
       working-directory: packages/typescript
