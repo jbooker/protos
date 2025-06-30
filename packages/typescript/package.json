@@ -1,0 +1,41 @@
+{
+  "name": "@yourorg/proto-models-ts",
+  "version": "1.0.0",
+  "description": "Generated TypeScript protobuf models for trading and financial data",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist src/*.ts !src/index.ts",
+    "copy-protos": "cp ../../generated/typescript/*.ts src/ || echo 'No generated files found - run GenProtos.sh first'",
+    "prebuild": "npm run copy-protos",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "protobuf",
+    "trading",
+    "finance",
+    "typescript",
+    "models"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/protos.git"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "dependencies": {
+    "google-protobuf": "^3.21.2"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.15.6",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,162 @@
+name: Build and Publish Proto Packages
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  generate-protos:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install protoc
+      uses: arduino/setup-protoc@v2
+      with:
+        version: '24.x'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Install protoc-gen-ts
+      run: npm install -g protoc-gen-ts
+    
+    - name: Generate protobuf files
+      run: ./GenProtos.sh
+    
+    - name: Upload generated files
+      uses: actions/upload-artifact@v4
+      with:
+        name: generated-protos
+        path: generated/
+        retention-days: 1
+
+  build-csharp:
+    needs: generate-protos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download generated files
+      uses: actions/download-artifact@v4
+      with:
+        name: generated-protos
+        path: generated/
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore packages/csharp/ProtoModels.csproj
+    
+    - name: Build
+      run: dotnet build packages/csharp/ProtoModels.csproj --configuration Release --no-restore
+    
+    - name: Pack
+      run: dotnet pack packages/csharp/ProtoModels.csproj --configuration Release --no-build --output ./nupkg
+    
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./nupkg/*.nupkg
+    
+    - name: Publish to NuGet
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+  build-typescript:
+    needs: generate-protos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download generated files
+      uses: actions/download-artifact@v4
+      with:
+        name: generated-protos
+        path: generated/
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Copy TypeScript files
+      run: |
+        mkdir -p packages/typescript/src
+        cp generated/typescript/*.ts packages/typescript/src/
+    
+    - name: Install dependencies
+      working-directory: packages/typescript
+      run: npm install
+    
+    - name: Build
+      working-directory: packages/typescript
+      run: npm run build
+    
+    - name: Upload npm package
+      uses: actions/upload-artifact@v4
+      with:
+        name: npm-package
+        path: packages/typescript/
+    
+    - name: Publish to npm
+      if: startsWith(github.ref, 'refs/tags/v')
+      working-directory: packages/typescript
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build-python:
+    needs: generate-protos
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download generated files
+      uses: actions/download-artifact@v4
+      with:
+        name: generated-protos
+        path: generated/
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Copy Python files
+      run: |
+        mkdir -p packages/python/src/proto_models
+        cp generated/python/*.py packages/python/src/proto_models/
+        cp generated/python/*.pyi packages/python/src/proto_models/
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      working-directory: packages/python
+      run: python -m build
+    
+    - name: Upload Python package
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package
+        path: packages/python/dist/
+    
+    - name: Publish to PyPI
+      if: startsWith(github.ref, 'refs/tags/v')
+      working-directory: packages/python
+      run: twine upload dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
