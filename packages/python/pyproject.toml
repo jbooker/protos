@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proto-models-py"
-version = "1.0.0"
+version = "1.0.1"
 description = "Generated Python protobuf models for trading and financial data"
 readme = "README.md"
 authors = [
