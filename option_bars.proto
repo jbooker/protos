@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+message OptionBar {
+  string symbol = 1;
+  OptionBarData bar = 2;
+  repeated OptionBarData bars = 3;
+}
+
+message OptionBarData {
+  string symbol = 1;
+  string timestamp = 2;  // ISO 8601 format timestamp
+  double open = 3;
+  double high = 4;
+  double low = 5;
+  double close = 6;
+  double volume = 7;
+  double trade_count = 8;
+  double vwap = 9;       // Volume Weighted Average Price
+}
+
+message OptionBarsRequest {
+  repeated string symbols = 1;
+  string timeframe = 2;   // "Minute", "Hour", "Day"
+  string start = 3;       // ISO 8601 format timestamp
+  string end = 4;         // ISO 8601 format timestamp
+  int32 limit = 5;        // Optional limit on number of bars
+}
+
+message OptionBarsResponse {
+  map<string, OptionBarList> bars = 1;  // Symbol -> list of bars
+  repeated string symbols = 2;
+  int32 count = 3;        // Total number of bars across all symbols
+  string timeframe = 4;
+  string start = 5;
+  string end = 6;
+}
+
+message OptionBarList {
+  repeated OptionBarData bars = 1;
+}
