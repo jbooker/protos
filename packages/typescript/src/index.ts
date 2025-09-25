@@ -1,6 +1,8 @@
 // Export all generated protobuf models
 export * from './chart';
 export * from './company_info';
+export * from './news';
+export * from './option_bars';
 export * from './option_chain';
 export * from './quote';
 export * from './wheelstrategy';

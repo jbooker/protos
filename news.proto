@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package news;
+
+import "google/protobuf/timestamp.proto";
+
+// Individual news article
+message NewsArticle {
+  string id = 1;                                    // Unique identifier for the article
+  string headline = 2;                              // Article headline
+  string author = 3;                                // Author name
+  google.protobuf.Timestamp created_at = 4;         // When the article was published
+  google.protobuf.Timestamp updated_at = 5;         // When the article was last updated
+  string summary = 6;                               // Article summary/excerpt
+  string content = 7;                               // Full article content (if available)
+  string url = 8;                                   // URL to the full article
+  repeated string symbols = 9;                      // Related stock symbols
+  repeated string images = 10;                      // Image URLs associated with the article
+  string source = 11;                               // News source (e.g., "Reuters", "Bloomberg")
+}
+
+// Response containing multiple news articles
+message NewsResponse {
+  repeated NewsArticle articles = 1;                // List of news articles
+  string symbol = 2;                                // Symbol the news is related to (if filtered)
+  int32 total_count = 3;                           // Total number of articles available
+  string next_page_token = 4;                      // Token for pagination
+}
+
+// Request parameters for fetching news
+message NewsRequest {
+  string symbol = 1;                                // Filter by symbol (optional)
+  int32 limit = 2;                                 // Maximum number of articles to return
+  google.protobuf.Timestamp start_date = 3;        // Start date for filtering articles
+  google.protobuf.Timestamp end_date = 4;          // End date for filtering articles
+  string page_token = 5;                           // For pagination
+  repeated string sources = 6;                     // Filter by news sources
+  string sort = 7;                                 // Sort order: "desc" (default) or "asc"
+}
