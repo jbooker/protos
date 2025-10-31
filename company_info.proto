@@ -29,6 +29,7 @@ message KeyStats {
     float sharesShort = 5;
     float sharesShortPriorMonth = 6;
     float dividendAmount = 7;
+    float dividendYield = 17; // dividend yield as percentage
     repeated string earningsDates = 8; // could be a range or specific if date announced
     float eps = 9;
     float peRatio = 10;
