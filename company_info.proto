@@ -43,6 +43,28 @@ message KeyStats {
     float debtToEquity = 19;
     float freeCashFlow = 20;
     float grossMargin = 21;
+    
+    // Dividend Events
+    string exDividendDate = 22;         // Date stock trades ex-dividend (critical for options pricing)
+    string dividendPaymentDate = 23;    // When dividend is paid to shareholders
+    string dividendDeclarationDate = 24; // When dividend was declared by company
+    
+    // Corporate Actions
+    repeated string stockSplitDates = 25; // Historical and upcoming stock split dates
+    string lastSplitDate = 26;           // Most recent stock split date
+    float lastSplitFactor = 27;          // Split ratio (e.g., 2.0 for 2-for-1 split)
+    
+    // Fiscal Calendar
+    string fiscalYearEnd = 28;           // Company's fiscal year end date
+    string nextReportDate = 29;          // Next quarterly earnings report date
+    
+    // Market Events (optional macro events)
+    repeated string fomcDates = 30;      // Upcoming Federal Reserve FOMC meetings
+    string nextIndexRebalance = 31;      // Next major index rebalancing date (if applicable)
+    
+    // Shareholder Events
+    string nextShareholderMeeting = 32;  // Next annual/special shareholder meeting
+    string lockupExpiration = 33;        // IPO lockup expiration date (if applicable)
 }
 
 message CompanyInfoRequest {
